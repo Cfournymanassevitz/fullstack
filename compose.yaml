@@ -1,0 +1,50 @@
+services:
+  # Service pour l'application Laravel
+  app:
+    build:
+      context: ./Artisan-app
+      dockerfile: Dockerfile
+    container_name: laravel_app
+    volumes:
+      - ./Artisan-app:/var/www
+    networks:
+      - laravel
+    ports:
+      - "8000:80"
+    environment:
+      ALLOWED_ORIGINS: http://localhost:8080
+    depends_on:
+        - db
+  db:
+    image: mysql:5.7
+    container_name: laravel_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: artisan_app
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - laravel
+
+
+  # Service pour le frontend Vue.js
+  frontend:
+    build:
+      context: ./crafteby-vu
+      dockerfile: Dockerfile
+    container_name: vue_frontend
+    ports:
+      - "8080:80"
+    networks:
+      - laravel
+
+networks:
+  laravel:
+    driver: bridge
+
+volumes:
+  dbdata:
+    driver: local
+
+
+  # Service pour la base de données MySQL
