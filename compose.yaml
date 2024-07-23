@@ -32,7 +32,11 @@ services:
     build:
       context: ./crafteby-vu
       dockerfile: Dockerfile
+      args:
+        - VITE_API_ENDPOINT=${VITE_API_ENDPOINT}
     container_name: vue_frontend
+    environment:
+      - VITE_API_ENDPOINT=${VITE_API_ENDPOINT}
     ports:
       - "8080:80"
     networks:
